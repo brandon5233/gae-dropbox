@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:border-collapse="http://www.w3.org/1999/xhtml" style="margin: 0; padding: 0; width: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>{{cwd}}</title>
+    <link rel="stylesheet" href="/display.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+
+<body style="margin: 0; padding: 0; width: 100%">
+
+{% if message != "" %}
+<script type="text/javascript">
+    alert("{{message}}")
+</script>
+{% endif %}
+
+<div class="navbar">
+   <h3 style="padding-left: 50px; ">DropBox</h3>
+   <h3 align="right" style="float: right; padding-right: 20px">welcome, {{user}}</h3>
+</div>
+
+<!-- navbar column -->
+<div class="navbar-vertical">
+    <div align="center" style="margin-top: 45%;" >
+        <h1 style="border-bottom: 1px solid black; width: 100%;">navbar</h1>
+
+        <a href="{{logout}}">logout</a><br/><br/>
+
+
+         <form method="post" action="/directory_handler" id="starred">
+                    <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+                    <input type="hidden" name="current_cwd" value="Bookmarks/">
+                    <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}">
+                    <input type="hidden" name="prev_cwd" value="{{prev_cwd}}">
+                    <input type="hidden" name="user" value="{{user}}">
+                    <a href="javascript:void(0)" onclick="document.getElementById('starred').submit()"><i class="material-icons yellowstar">star</i> Bookmarked Folders</a>
+                    <input type="hidden" name="button" value="Open Star Folder"/>
+
+                    <input type="hidden" name="dir_level" value="1">
+                </form>
+<br>
+        <form method="post" action="/directory_handler" id="home">
+                    <input type="hidden" name="current_cwd_key" value="{{user}}">
+                    <input type="hidden" name="current_cwd" value="/">
+                    <input type="hidden" name="prev_cwd_key" value="">
+                    <input type="hidden" name="prev_cwd" value="">
+                    <input type="hidden" name="user" value="{{user}}">
+                    <a href="javascript:void(0)" onclick="document.getElementById('home').submit()">Home</a>
+                    <input type="hidden" name="button" value="Refresh"/>
+                    <input type="hidden" name="dir_level" value="1">
+                </form>
+    </div>
+</div>
+
+<!-- container for the 3 columns -->
+<!--<div class="three-div-container" style="width: 100%; height: 100%; background-color: black; top:0; left: 0;bottom:0;right:0; display:table; margin: 0; padding: 0;">
+ -->
+<div class="salutation" align="left">
+    <p>you are here: {{current_cwd}}</p>
+</div>
+
+
+<div class="navbar-right">
+
+</div>
+{% if current_cwd == "Bookmarks/" %}
+{%else%}
+<div class = "addfolder" align="right" style="width: 150px; margin-top: 5%; ">
+    <div style="margin-left: 10px; height: 100px; width: 100%">
+    <form method="post" action="/directory_handler">
+        Add Folder:<input type="text" name="dir_name">
+        <input type="submit" name="button" value="Add Folder">
+        <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+        <input type="hidden" name="current_cwd" value="{{current_cwd}}">
+        <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}">
+        <input type="hidden" name="prev_cwd" value="{{prev_cwd}}">
+        <input type="hidden" name="user" value="{{user}}">
+        <!-- <input type="submit" name="button" value="Refresh"> -->
+        <input type="hidden" name="dir_level" value="{{dir_level}}">
+    </form>
+    </div>
+</div>
+
+<div class="uploadfile">
+    <h1></h1>
+    <form method="post" action="{{upload_url}}" enctype="multipart/form-data">
+<div style=" width: 100%; background-color: #cccccc; height: 100px;">
+<div style="margin-left: 20%; ">
+            Upload File: <input type="file" name="fileupload"/>
+            <input type="submit" name="button" value="Upload" style="margin-top: 1%"/>
+            <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}"/>
+            <input type="hidden" name="current_cwd" value="{{current_cwd}}"/>
+            <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}"/>
+            <input type="hidden" name="prev_cwd" value="{{prev_cwd}}"/>
+            <input type="hidden" name="user" value="{{user}}"/>
+            <input type="hidden" name="dir_level" value="{{dir_level}}"/>
+</div>
+</div>
+
+
+
+    </form>
+</div>
+
+{% endif %}
+<div class="wrapper">
+    <div class="content">
+
+    <table>
+        <tr>
+            <th>Name:</th>
+            {% if current_cwd == "Bookmarks/" %}
+                <th> Path</th>
+            {% else %}
+                <th>Date Created</th>
+            {% endif %}
+            <th></th>
+            <th></th>
+            <th></th>
+
+        </tr>
+
+
+        {% if dir_level > 1 %}
+        <tr style="height: 64px; border-bottom: 1px solid lightgray;">
+            <td style="padding-left:1%; min-width:100%;">
+                <form method="post" action="/directory_handler" id="back"/>
+                    <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}"/>
+                    <input type="hidden" name="current_cwd" value="{{current_cwd}}"/>
+                    <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}"/>
+                    <input type="hidden" name="prev_cwd" value="{{prev_cwd}}"/>
+                    <input type="hidden" name="user" value="{{user}}"/>
+                    <a href="javascript:void(0)" onclick="document.getElementById('back').submit()">../</a>
+                    <input type="hidden" name="button" value="Back"/>
+                    <input type="hidden" name="dir_level" value="{{dir_level}}"/>
+                </form>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% endif %}
+
+        {% for each_dir in list_of_subdirectory %}
+
+        <tr style="height: 64px; border-bottom: 1px solid lightgray;">
+            <td style="padding-left:1%; min-width:100%;" align="center">
+                <form method="post" action="/directory_handler" id="{{loop.index}}">
+                    <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+                    <input type="hidden" name="current_cwd" value="{{current_cwd}}">
+                    <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}">
+                    <input type="hidden" name="prev_cwd" value="{{prev_cwd}}">
+                    <input type="hidden" name="user" value="{{user}}">
+                    <a href="javascript:void(0)" onclick="document.getElementById('{{loop.index}}').submit()"><i class="material-icons folder">folder</i> {{each_dir}}</a>
+                    <input type="hidden" name="button" value="Open Folder"/>
+                    <input type="hidden" name="clicked_dir" value="{{list_of_subdirectoryIDs[loop.index-1]}}">
+                    <input type="hidden" name="dir_level" value="{{dir_level}}">
+                </form>
+            </td>
+
+            {% if current_cwd == "Bookmarks/" %}
+            <td>
+                {{subdirectory_cwd[loop.index-1]}}
+            </td>
+            {%else%}
+            <td>
+                {{formatted_date[loop.index-1]}}
+            </td>
+            {%endif%}
+
+            {% if current_cwd == "Bookmarks/" %}
+            <td></td>
+            {% else %}
+            <td>
+                 <form method="post" action="/directory_handler" id="star-dir{{loop.index}}">
+                   <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+                    <input type="hidden" name="current_cwd" value="{{current_cwd}}">
+                    <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}">
+                    <input type="hidden" name="prev_cwd" value="{{prev_cwd}}">
+                    <input type="hidden" name="user" value="{{user}}">
+                    <input type="hidden" name="button" value="star-dir"/>
+                     {% if list_star_folder[loop.index-1] == "True" %}
+                    <i onClick="document.getElementById('star-dir{{loop.index}}').submit()" class="material-icons star_on">star</i>
+                    {% else %}
+                    <i onClick="document.getElementById('star-dir{{loop.index}}').submit()" class="material-icons star_off">star_border</i>
+                    {% endif %}
+
+                    <input type="hidden" name="clicked_dir" value="{{list_of_subdirectoryIDs[loop.index-1]}}">
+                    <input type="hidden" name="dir_level" value="{{dir_level}}">
+                </form>
+
+            </td>
+            {% endif%}
+            <td></td>
+
+            {% if current_cwd == "Bookmarks/" %}
+            <td></td>
+            {%else%}
+            <td align="right" style="padding-right: 1%">
+                <form method="post" action="/directory_handler" id="delete-dir{{loop.index}}">
+                   <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+                    <input type="hidden" name="current_cwd" value="{{current_cwd}}">
+                    <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}">
+                    <input type="hidden" name="prev_cwd" value="{{prev_cwd}}">
+                    <input type="hidden" name="user" value="{{user}}">
+                    <input type="hidden" name="button" value="Delete"/>
+                    <i onClick="document.getElementById('delete-dir{{loop.index}}').submit()" class="material-icons delete">close</i>
+                    <input type="hidden" name="clicked_dir" value="{{list_of_subdirectoryIDs[loop.index-1]}}">
+                    <input type="hidden" name="dir_level" value="{{dir_level}}">
+                </form>
+            </td>
+            {%endif%}
+        </tr>
+        {% endfor %}
+
+        {% for file in list_of_files %}
+        <tr style="height: 64px; border-bottom: 1px solid lightgray;">
+            <td style="padding-left:1%; min-width:100% ">
+                {{file}}
+            </td>
+
+            <td>
+                {{list_of_filetime[loop.index-1]}}
+            </td>
+
+            <td>
+                 <form method="post" action="/download" id="download{{loop.index}}">
+                  <input type="hidden" name="index" value="{{loop.index-1}}"/>
+                  <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+                <i class="material-icons download" onclick="document.getElementById('download{{loop.index}}').submit()">file_download</i>
+                </form>
+
+            </td>
+
+            <td>
+                <form method="post" action="/directory_handler" id="rename{{loop.index}}">
+                   <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+                    <input type="hidden" name="current_cwd" value="{{current_cwd}}">
+                    <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}">
+                    <input type="hidden" name="prev_cwd" value="{{prev_cwd}}">
+                    <input type="hidden" name="user" value="{{user}}">
+                    <input type="hidden" name="button" value="rename"/>
+                   <!-- <i onClick="document.getElementById('rename{{loop.index}}').submit()" class="material-icons rename">mode_edit</i>
+                    -->
+
+                    <i id="pencil" class="material-icons rename" onclick="var x = document.getElementById('showhide{{loop.index}}');
+                                                                            if (x.style.display === 'none') {
+                                                                                x.style.display = 'inline';
+                                                                            } else {
+                                                                                x.style.display = 'none';
+                                                                            }">mode_edit</i>
+                     <div id="showhide{{loop.index}}" style="display: none">
+                    <input type="text" name="new_name" id="new_name" placeholder="New File Name">
+                    <input type="submit" onclick="document.getElementById('rename{{loop.index}}').submit()" id="submitbutton">
+                        </div>
+                    <input type="hidden" name="clicked_dir" value="{{file}}"/>
+                    <input type="hidden" name="dir_level" value="{{dir_level}}">
+
+
+                </form>
+            </td>
+
+            <td align="right">
+                <form method="post" action="/directory_handler" id="delete-file{{loop.index}}">
+                   <input type="hidden" name="current_cwd_key" value="{{current_cwd_key}}">
+                    <input type="hidden" name="current_cwd" value="{{current_cwd}}">
+                    <input type="hidden" name="prev_cwd_key" value="{{prev_cwd_key}}">
+                    <input type="hidden" name="prev_cwd" value="{{prev_cwd}}">
+                    <input type="hidden" name="user" value="{{user}}">
+                    <input type="hidden" name="button" value="delete_file"/>
+                    <i onClick="document.getElementById('delete-file{{loop.index}}').submit()" class="material-icons delete">close</i>
+                    <input type="hidden" name="clicked_dir" value="{{file}}"/>
+                    <input type="hidden" name="dir_level" value="{{dir_level}}">
+                </form>
+            </td>
+
+        </tr>
+        {% endfor%}
+
+    </table>
+<script>
+function myFunction() {
+    var x = document.getElementById("renamer");
+    if (x.style.display === "none") {
+        x.style.display = "inline";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+
+    </div>
+</div>
+
+</body>
+</html>
